@@ -1,0 +1,165 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('./assets/fonts/Poppins/Poppins-Regular.ttf');
+}
+* {
+  font-family: 'Poppins';
+}
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.ant-select-selector,
+.ant-select-selection-search-input {
+  background-color: #181818 !important;
+  color: #aaa !important;
+  border: 1px solid transparent !important;
+}
+.ant-select-selection-placeholder {
+  color: #888 !important;
+  z-index: 1;
+}
+input[type='radio'] {
+  width: 10px; height: 10px;
+  cursor: pointer;
+}
+input[type='radio']:after {
+  width: 10px;
+  height: 10px;
+  border-radius: 15px;
+  top: -3px;
+  /* left: -1px; */
+  position: relative;
+  background-color: #d1d3d1;
+  content: '';
+  display: inline-block;
+  visibility: visible;
+  /* border: 2px solid white; */
+}
+input[type='radio']:checked:after {
+  width: 10px;
+  height: 10px;
+  border-radius: 15px;
+  top: -3px;
+  /* left: -1px; */
+  position: relative;
+  background-color: #ffa500;
+  content: '';
+  display: inline-block;
+  visibility: visible;
+  border: 1px solid white;
+}
+
+.sw {
+  width: 90%;
+}
+
+
+@layer base {
+
+  * {
+    @apply text-[12px];
+  }
+  h1 {
+    @apply !text-5xl !font-black;
+  }
+  h2 {
+    @apply !text-2xl !font-black;
+  }
+  h3 {
+    @apply !text-lg !font-black;
+  }
+
+  /* .scroll-shadow {
+    position: relative;
+  }
+  .scroll-shadow::after {
+    content: '';
+    height: 100%;
+    padding: 2px;
+    margin: 0;
+    border: 1px solid red;
+    background: #111;
+    top: 0;
+    right: -13px;
+    position: fixed;
+    box-shadow: -2px 0 5px 2px #111 ;
+  } */
+
+  .text-child h1,
+  .text-child h2,
+  .text-child h3,
+  .text-child h4,
+  .text-child div,
+  .text-child a {
+    @apply text-inherit;
+  }
+  .text-child.force * {
+    @apply !text-inherit;
+  }
+
+  a,
+  input[type='button'],
+  input[type='submit'],
+  button {
+    letter-spacing: 1.3px;
+  }
+
+  input[type='radio'] {
+    @apply inline-block bg-black;
+  }
+
+  .bg1 {
+    background: url('./assets/images/bg\ group.png') no-repeat;
+    background-size: contain;
+    background-position: center;
+  }
+  .bg_locVector {
+    background: url('./assets/images/newbg5.png') no-repeat;
+    background-size: contain;
+    background-position: top center;
+  }
+  .bg_rain {
+    background: url('./assets/images/newbg6.png') no-repeat;
+    background-size: contain;
+    background-position: bottom center;
+  }
+
+  .hvr_trgtx {
+    @apply !max-w-none !overflow-visible;
+  }
+  .w_hvr .hvr_trgt {
+    @apply max-w-0 overflow-hidden p-0;
+  }
+  .w_hvr:hover .hvr_trgt {
+    @apply transition-all duration-300 max-w-none p-2;
+  }
+
+}
+
+
+@layer components {
+
+  .btn_sty1 {
+    @apply border border-secondary rounded-md px-6 py-2 uppercase text-secondary hover:text-secondary hover:shadow-lg hover:shadow-black;
+  }
+  .btn_sty2 {
+    @apply border border-secondary bg-secondary rounded-md px-6 py-2 uppercase text-white  hover:shadow-lg hover:shadow-black;
+  }
+  .btn_sty1.sml,
+  .btn_sty2.sml {
+    @apply p-1 px-2 text-sm;
+  }
+
+
+
+}
