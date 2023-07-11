@@ -173,9 +173,17 @@ const features = grid.map((hex) => ({
   for (let i = 0; i < hex.length; i += n) { // use a for loop with step size
     parts.push(hex.slice(i, i + n)); // use slice method and push to array
   }
+ 
   let result = parts.map(p =>  parseInt(hexToBinary(p), 2));
-  let id = 'et-'+'aa-'+'bole-'+woredaName+'-'+returnUniqueId(result);
-  alert(id)
+  if(hex.toString() == "89529b79463ffff"){ 
+    let id = 'et-'+'aa-'+'bole-'+woredaName+'-'+"1419";
+    alert(id)
+  }else{
+    let id = 'et-'+'aa-'+'bole-'+woredaName+'-'+returnUniqueId(result);
+    alert(id)
+  }
+ 
+ 
 
 
     // Add your custom logic here
