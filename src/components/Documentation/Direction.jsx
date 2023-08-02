@@ -10,7 +10,7 @@ import {
   EditControl,
   GeoJSON
 } from "react-leaflet";
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import { returnBole , checkInWhichWoreda , returnUniqueId } from "../../data/coordinates";
 import { direction } from "./../../data/index";
 import red from "./red.png";
@@ -42,6 +42,11 @@ function AddMarkerToClick() {
   ]);
   const [l1, setL1] = useState("");
   const [lo1, setLO1] = useState("");
+
+
+
+
+
 
   const RedIcon = L.icon({
     iconUrl: require("./red.png"),
@@ -272,7 +277,16 @@ const GreenIcon = L.icon({
 });
 
 
-
+const LocationIcon = L.icon({
+  iconUrl: require("./location.png"),
+  iconRetinaUrl: require("./location.png"),
+  iconAnchor: null,
+  shadowUrl: null,
+  shadowSize: null,
+  shadowAnchor: null,
+  iconSize: [35, 35],
+  className: "leaflet-venue-icon",
+});
 const handleUsername = (event) => {
   setUserName(event.target.value);
 };
@@ -295,8 +309,48 @@ const directionC = (lat1 , lng1 ,lat2 , lng2) => {
   })
 
 }
-return (
 
+
+const [position, setPosition] = useState(null);
+  // Define a state variable to store the watcher ID
+  const [watcherId, setWatcherId] = useState(null);
+
+    // Define a useEffect hook to create and clear the position watcher
+    useEffect(() => {
+      // Define a success callback function
+      function success(pos) {
+        // Get the coordinates from the position object
+        const crd = pos.coords;
+        // Update the position state
+        setPosition(crd);
+      }
+  
+      // Define an error callback function
+      function error(err) {
+        // Console the error code and message
+        console.error(`ERROR (${err.code}): ${err.message}`);
+      }
+  
+      // Define an options object
+      const options = {
+        enableHighAccuracy: true, // Try to use the most accurate position possible
+        timeout: 5000, // Maximum time to wait for a position
+        maximumAge: 0 // Maximum age of a cached position
+      };
+
+          // Call the watchPosition method and store the ID in the state
+    setWatcherId(navigator.geolocation.watchPosition(success, error, options));
+    // Return a cleanup function to clear the watcher when the component unmounts or the dependencies change
+    return () => {
+      if (watcherId) {
+        navigator.geolocation.clearWatch(watcherId);
+      }
+    };
+  }, []);
+
+
+return (
+    
 
     <div class="flex flex-row w-full h-screen divide-y divide-solid">
   
@@ -351,6 +405,11 @@ return (
           <Popup>Marker is at {marker}</Popup>
         </Marker>
       ))} 
+
+      { 
+          position != null ?  <Marker position={[position.latitude , position.longitude]} icon={LocationIcon}/> : ""  
+          
+      }
 
 
         <Polyline positions={pos} color="red" />
