@@ -25,103 +25,6 @@ const polygon = returnBole()
 
 
 
-
-function AddMarkerToClick() {
-  const [rmarker, redMarker] = useState([
-    
-            
-  ]);
-  const [gmarker, greenMarker] = useState([
- 
-  ]);
-
-  const [pos, setPos] = useState([
-  
-
-   
-  ]);
-  const [l1, setL1] = useState("");
-  const [lo1, setLO1] = useState("");
-
-
-
-
-
-
-  const RedIcon = L.icon({
-    iconUrl: require("./red.png"),
-    iconRetinaUrl: require("./red.png"),
-    iconAnchor: null,
-    shadowUrl: null,
-    shadowSize: null,
-    shadowAnchor: null,
-    iconSize: [35, 35],
-    className: "leaflet-venue-icon",
-  });
-
-  const GreenIcon = L.icon({
-    iconUrl: require("./green.png"),
-    iconRetinaUrl: require("./green.png"),
-    iconAnchor: null,
-    shadowUrl: null,
-    shadowSize: null,
-    shadowAnchor: null,
-    iconSize: [35, 35],
-    className: "leaflet-venue-icon",
-  });
-
-  const map = useMapEvents({
-    async click(e) {
-      const newMarker = e.latlng;
-      if (l1 == "") {
-        setL1(newMarker.lat);
-        setLO1(newMarker.lng);
-        let _gmarker = [];
-        _gmarker.push(e.latlng);
-        greenMarker(_gmarker);
-      } else {
-        try {
-          let data = await direction(
-            { lat: l1, lon: lo1 },
-            newMarker,
-            'sdsd'
-          );
-          let _rmarker = [];
-
-          _rmarker.push(e.latlng);
-          redMarker(_rmarker);
-          console.log(data);
-          if (data.msg == "Ok") {
-            setPos(data.direction);
-          }
-        } catch (err) {
-          console.log(err);
-        }
-        setL1("");
-        setLO1("");
-      }
-    },
-  });
-
-  return (
-    <div>
-      {rmarker.map((marker) => (
-        <Marker position={marker} icon={RedIcon}>
-          <Popup>Marker is at {marker}</Popup>
-        </Marker>
-      ))}
-
-      {gmarker.map((marker) => (
-        <Marker position={marker} icon={GreenIcon}>
-          <Popup>Marker is at {marker}</Popup>
-        </Marker>
-      ))}
-
-      <Polyline positions={pos} color="red" />
-    </div>
-  );
-}
-
 function Direction() {
 
 
@@ -151,21 +54,33 @@ const houseids = [
     gridId : "89529b79463ffff",
     foundInGrid : "et-aa-bole-woreda5-1419",
     latitude : 9.00566 ,
-    longitude : 38.80114
+    longitude : 38.80114,
+    locationDesc :[
+      "24 kidums mikahel caholic church",
+      "DHL 100m"
+    ]
   },
   {
     id : "2022",
     gridId : "89529b7941bffff",
     foundInGrid : "et-aa-bole-woreda5-2022",
     latitude  : 9.0113635,
-    longitude : 38.8003394
+    longitude : 38.8003394,
+    locationDesc :[
+      "lem hotel",
+      "24 mesgid"
+    ]
   },
   {
     id : "2143",
     gridId : "89529b79693ffff",
     foundInGrid : "et-aa-bole-woreda1-2143",
     latitude : 9.00505,
-    longitude : 38.78591
+    longitude : 38.78591,
+    locationDesc :[
+      "Berhane Zare school",
+      "yo cafe metatefiya 50m"
+    ]
   }
 ]
 
@@ -288,6 +203,7 @@ const LocationIcon = L.icon({
   className: "leaflet-venue-icon",
 });
 const handleUsername = (event) => {
+  setClickedIndex(-1)
   setUserName(event.target.value);
 };
  
@@ -304,8 +220,8 @@ const directionC = (lat1 , lng1 ,lat2 , lng2) => {
   ]);
   const apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjb21wYW55bmFtZSI6IkdlYmV0YTEiLCJpZCI6ImE0YzRhYTIxLWJkOWEtNDZkOS04ZDg0LTIzOWVkOWFiYzIxNCIsInVzZXJuYW1lIjoiZ2ViZXRhMSJ9.tsX7gUNLshPSsXTDoqX5MDBXcjakgc1dilSSZlggQq8";
   direction({ lat :lat1 , lon :lng1} , {lat : lat2 , lng:lng2} ,apiKey).then((data)=>{
-   
-    setPos(data.direction)
+    console.log(data)
+     setPos(data.direction)
   })
 
 }
@@ -314,6 +230,7 @@ const directionC = (lat1 , lng1 ,lat2 , lng2) => {
 const [position, setPosition] = useState(null);
   // Define a state variable to store the watcher ID
   const [watcherId, setWatcherId] = useState(null);
+  const [clickedIndex , setClickedIndex] = useState(-1)
 
     // Define a useEffect hook to create and clear the position watcher
     useEffect(() => {
@@ -348,6 +265,10 @@ const [position, setPosition] = useState(null);
     };
   }, []);
 
+  function dispalyTheText(){
+    return houseids[clickedIndex].locationDesc.map((b)=> <p>{b}</p>)
+  }
+
 
 return (
     
@@ -359,22 +280,24 @@ return (
           <label for="search" class="sr-only">Search</label>
           <div class="relative mx-[5%] mt-[25%]">
             <input onChange={handleUsername} type="search" id="search" class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-l-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" placeholder="Search..."/>
-            {/* <button type="submit" class=" mt-[5%] w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-r-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            onClick={ (e) => setSearchValueData(e) }
-            >Search</button> */}
+        
           </div>
 
           <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"></hr>
            <div className="mx-[5%]  ">
               {
-                houseids.map((n)=>{
+                houseids.map((n,index)=>{
                   if( username.trim() != "" &&  n.foundInGrid.includes(username.trim())) {
-                     return <button type="submit" class=" mt-[5%] w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-r-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-             onClick={ (e) => {
-              e.preventDefault()
-              directionC(9.021456009795491, 38.75394910263811 , n.latitude , n.longitude )
-             } }
-            >{n.foundInGrid}</button>
+                     
+                     
+                      if(clickedIndex == -1)  return  <button type="submit" class=" mt-[5%] w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-r-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    onClick={ (e) => {
+                      e.preventDefault()
+                      setClickedIndex(index)
+                      directionC(9.021456009795491, 38.75394910263811 , n.latitude , n.longitude )
+                    } }
+                    >{n.foundInGrid}</button> 
+                    else return  dispalyTheText()
                      
                   }
                   
@@ -406,10 +329,10 @@ return (
         </Marker>
       ))} 
 
-      { 
+      {/* { 
           position != null ?  <Marker position={[position.latitude , position.longitude]} icon={LocationIcon}/> : ""  
           
-      }
+      } */}
 
 
         <Polyline positions={pos} color="red" />
